@@ -1,99 +1,119 @@
 // Tabs
 let tabcontent = document.querySelectorAll(".tabcontent"),
-    tabs = document.querySelectorAll('.tabheader__item'),
-    tabcontainer = document.querySelector('.tabheader__items');
+  tabs = document.querySelectorAll(".tabheader__item"),
+  tabcontainer = document.querySelector(".tabheader__items");
 
 function hidetabs() {
-    tabcontent.forEach(item => {
-        item.classList.add("hide")
-        item.classList.remove('show', "fade")
-    });
-    tabs.forEach(item => {
-        item.classList.remove('tabheader__item_active')
-    })
+  tabcontent.forEach((item) => {
+    item.classList.add("hide");
+    item.classList.remove("show", "fade");
+  });
+  tabs.forEach((item) => {
+    item.classList.remove("tabheader__item_active");
+  });
 }
 function showtabs(i) {
-    tabcontent[i].classList.add("show", "fade")
-    tabcontent[i].classList.remove("hide")
-    tabs[i].classList.add("tabheader__item_active")
+  tabcontent[i].classList.add("show", "fade");
+  tabcontent[i].classList.remove("hide");
+  tabs[i].classList.add("tabheader__item_active");
 }
-hidetabs()
-showtabs(1)
+hidetabs();
+showtabs(1);
 
 tabcontainer.addEventListener("click", (e) => {
-    let target = e.target;
+  let target = e.target;
 
-    if (target && target.classList.contains("tabheader__item")) {
-        tabs.forEach((item, index) => {
-            if (target === item) {
-                hidetabs();
-                showtabs(index);
-            }
-        })
-    }
-})
+  if (target && target.classList.contains("tabheader__item")) {
+    tabs.forEach((item, index) => {
+      if (target === item) {
+        hidetabs();
+        showtabs(index);
+      }
+    });
+  }
+});
 
-// Timer 
+// Timer
 
-const deadline = '2023-10-01'
+const deadline = "2025-10-01";
 
 function getTimeRemaning(endtime) {
-    const t = Date.parse(endtime) - Date.parse(new Date()),
-        days = Math.floor(t / (1000 * 60 * 60 * 24)),
-        hours = Math.floor((t / (1000 * 60 * 60) % 24)),
-        minutes = Math.floor((t / 1000 / 60) % 60),
-        seconds = Math.floor((t / 1000) % 60);
+  const t = Date.parse(endtime) - Date.parse(new Date()),
+    days = Math.floor(t / (1000 * 60 * 60 * 24)),
+    hours = Math.floor((t / (1000 * 60 * 60)) % 24),
+    minutes = Math.floor((t / 1000 / 60) % 60),
+    seconds = Math.floor((t / 1000) % 60);
 
-    return {
-        total: t,
-        days,
-        hours,
-        minutes,
-        seconds
-    }
+  return {
+    total: t,
+    days,
+    hours,
+    minutes,
+    seconds,
+  };
 }
 
 // soni
 
-// function getZero(num) {
-//     if(num < 10) {
-//         return `0${num}`
-
-//     } else {
-//         return num
-//     }
-// }
-
-function setClock(selector, endtime) {
-    const timer = document.querySelector(selector),
-        days = timer.querySelector("#days"),
-        hours = timer.querySelector("#hours"),
-        minutes = timer.querySelector("#minutes"),
-        seconds = timer.querySelector("#seconds"),
-        timeInterval = setInterval(updateClock, 1000);
-
-    updateClock()
-
-    function updateClock() {
-        const t = getTimeRemaning(endtime)
-
-        // soni
-        // days.innerHTML = getZero(t.days);
-        // hours.innerHTML = getZero(t.hours)
-        // minutes.innerHTML = getZero(t.minutes);
-        // seconds.innerHTML = getZero(t.seconds);
-
-
-        days.innerHTML = t.days;
-        hours.innerHTML = t.hours
-        minutes.innerHTML = t.minutes;
-        seconds.innerHTML = t.seconds;
-
-        if (t.total <= 0) {
-            clearInterval(timeInterval)
-        }
-
-    }
+function getZero(num) {
+  if (num < 10) {
+    return `0${num}`;
+  } else {
+    return num;
+  }
 }
 
-setClock(".timer", deadline)
+function setClock(selector, endtime) {
+  const timer = document.querySelector(selector),
+    days = timer.querySelector("#days"),
+    hours = timer.querySelector("#hours"),
+    minutes = timer.querySelector("#minutes"),
+    seconds = timer.querySelector("#seconds"),
+    timeInterval = setInterval(updateClock, 1000);
+
+  updateClock();
+
+  function updateClock() {
+    const t = getTimeRemaning(endtime);
+
+    // soni
+    days.innerHTML = getZero(t.days);
+    hours.innerHTML = getZero(t.hours);
+    minutes.innerHTML = getZero(t.minutes);
+    seconds.innerHTML = getZero(t.seconds);
+
+    // days.innerHTML = t.days;
+    // hours.innerHTML = t.hours
+    // minutes.innerHTML = t.minutes;
+    // seconds.innerHTML = t.seconds;
+
+    if (t.total <= 0) {
+      clearInterval(timeInterval);
+    }
+  }
+}
+
+setClock(".timer", deadline);
+
+// Slider
+
+const slides = document.querySelectorAll(".offer__slide"),
+  prev = document.querySelector(".offer__slider-prev"),
+  next = document.querySelector(".offer__slider-next"),
+  total = document.querySelector("#total"),
+  current = document.querySelector("#current"),
+  slidesWrapper = document.querySelector(".offer__slider-wrapper"),
+  slider = document.querySelector(".offer__slider"),
+  slidesField = document.querySelector(".offer__slider-inner"),
+  width = window.getComputedStyle(slidesWrapper).width;
+
+let slideIndex = 1;
+let offset = 0;
+
+if (slides.length < 10) {
+  total.textContent = `0${slides.length}`;
+  current.textContent = `0${slideIndex}`;
+} else {
+  total.textContent = slides.length;
+  current.textContent = slideIndex;
+}
