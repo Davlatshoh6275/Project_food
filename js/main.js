@@ -117,3 +117,13 @@ if (slides.length < 10) {
   total.textContent = slides.length;
   current.textContent = slideIndex;
 }
+
+slidesField.style.width = 100 * slides.length + "%";
+slidesField.style.display = "flex";
+slidesField.style.transition = "0.5s all linear";
+
+slidesWrapper.style.overflow = "hidden"
+
+slides.forEach((slide) => {
+  slide.style.width = width;
+});
