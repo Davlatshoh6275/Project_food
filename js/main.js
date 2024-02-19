@@ -1,3 +1,31 @@
+let btns = document.querySelectorAll("[data-modal]");
+let modal = document.querySelector(".modal");
+let closeBtn = document.querySelector("[data-close]");
+
+for (let item of btns) {
+  item.addEventListener("click", () => {
+    modal.classList.add("show", "fade");
+    modal.classList.remove("hide");
+
+    document.body.style.overflow = "hidden";
+  });
+}
+
+closeBtn.addEventListener("click", () => {
+  modal.classList.add("hide");
+  modal.classList.remove("show");
+
+  document.body.style.overflow = "";
+});
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.classList.add("hide");
+    modal.classList.remove("show");
+
+    document.body.style.overflow = "";
+  }
+});
+
 // Tabs
 let tabcontent = document.querySelectorAll(".tabcontent"),
   tabs = document.querySelectorAll(".tabheader__item"),
@@ -19,14 +47,16 @@ function showtabs(i) {
   tabs[i].classList.add("tabheader__item_active");
 }
 hidetabs();
-showtabs(1);
+showtabs(0);
 
 tabcontainer.addEventListener("click", (e) => {
   let target = e.target;
 
+  console.log(target);
+
   if (target && target.classList.contains("tabheader__item")) {
     tabs.forEach((item, index) => {
-      if (target === item) {
+      if (item === target) {
         hidetabs();
         showtabs(index);
       }
@@ -34,145 +64,46 @@ tabcontainer.addEventListener("click", (e) => {
   }
 });
 
-// Timer
-
-const deadline = "2025-10-01";
-
-function getTimeRemaning(endtime) {
-  const t = Date.parse(endtime) - Date.parse(new Date()),
-    days = Math.floor(t / (1000 * 60 * 60 * 24)),
-    hours = Math.floor((t / (1000 * 60 * 60)) % 24),
-    minutes = Math.floor((t / 1000 / 60) % 60),
-    seconds = Math.floor((t / 1000) % 60);
-
-  return {
-    total: t,
-    days,
-    hours,
-    minutes,
-    seconds,
-  };
-}
-
-// soni
-
-function getZero(num) {
-  if (num < 10) {
-    return `0${num}`;
-  } else {
-    return num;
-  }
-}
-
-function setClock(selector, endtime) {
-  const timer = document.querySelector(selector),
-    days = timer.querySelector("#days"),
-    hours = timer.querySelector("#hours"),
-    minutes = timer.querySelector("#minutes"),
-    seconds = timer.querySelector("#seconds"),
-    timeInterval = setInterval(updateClock, 1000);
-
-  updateClock();
-
-  function updateClock() {
-    const t = getTimeRemaning(endtime);
-
-    // soni
-    days.innerHTML = getZero(t.days);
-    hours.innerHTML = getZero(t.hours);
-    minutes.innerHTML = getZero(t.minutes);
-    seconds.innerHTML = getZero(t.seconds);
-
-    // days.innerHTML = t.days;
-    // hours.innerHTML = t.hours
-    // minutes.innerHTML = t.minutes;
-    // seconds.innerHTML = t.seconds;
-
-    if (t.total <= 0) {
-      clearInterval(timeInterval);
-    }
-  }
-}
-
-setClock(".timer", deadline);
-
-// Slider
-
-// const slides = document.querySelectorAll(".offer__slide"),
-//   prev = document.querySelector(".offer__slider-prev"),
-//   next = document.querySelector(".offer__slider-next"),
-//   total = document.querySelector("#total"),
-//   current = document.querySelector("#current"),
-//   slidesWrapper = document.querySelector(".offer__slider-wrapper"),
-//   slider = document.querySelector(".offer__slider"),
-//   slidesField = document.querySelector(".offer__slider-inner"),
-//   width = window.getComputedStyle(slidesWrapper).width;
-
-// let slideIndex = 1;
-// let offset = 0;
-
-// if (slides.length < 10) {
-//   total.textContent = `0${slides.length}`;
-//   current.textContent = `0${slideIndex}`;
-// } else {
-//   total.textContent = slides.length;
-//   current.textContent = slideIndex;
-// }
-
-// slidesField.style.width = 100 * slides.length + "%";
-// slidesField.style.display = "flex";
-// slidesField.style.transition = "0.5s all linear";
-
-// slidesWrapper.style.overflow = "hidden";
-
-// slides.forEach((slide) => {
-//   slide.style.width = width;
-// });
-
-// Slider
+const slides = document.querySelectorAll(".offer__slide");
+const next = document.querySelector(".offer__slider-next");
+const prev = document.querySelector(".offer__slider-prev");
+const current = document.querySelector("#current");
+const total = document.querySelector("#total");
 
 let slideIndex = 1;
-const slides = document.querySelectorAll(".offer__slide"),
-  prev = document.querySelector(".offer__slider-prev"),
-  next = document.querySelector(".offer__slider-next"),
-  total = document.querySelector("#total"),
-  current = document.querySelector("#current");
 
-showSlides(slideIndex);
+showSlide(1);
 
-if (slides.length < 10) {
-  total.textContent = `0${slides.length}`;
-} else {
-  total.textContent = slides.length;
-}
-
-function showSlides(n) {
+function showSlide(n) {
   if (n > slides.length) {
     slideIndex = 1;
   }
+
   if (n < 1) {
     slideIndex = slides.length;
   }
 
-  slides.forEach((item) => (item.style.display = "none"));
+  for (let item of slides) {
+    item.style.display = "none";
+  }
+  slides[slideIndex - 1].style.display = "block";
 
-  slides[slideIndex - 1].style.display = "block"; // Как ваша самостоятельная работа - переписать на использование классов show/hide
-
-  if (slides.length < 10) {
-    current.textContent = `0${slideIndex}`;
+  if (n < 9) {
+    total.innerHTML = `0${slides.length}`;
+    current.innerHTML = `0${slideIndex}`;
   } else {
-    current.textContent = slideIndex;
+    total.innerHTML = slides.length;
+    current.innerHTML = slideIndex;
   }
 }
 
 function plusSlides(n) {
-  showSlides((slideIndex += n));
+  showSlide((slideIndex += n));
 }
-
-prev.addEventListener("click", function () {
-  plusSlides(-1);
+next.addEventListener("click", () => {
+  plusSlides(1);
 });
 
-next.addEventListener("click", function () {
-  plusSlides(1);
+prev.addEventListener("click", () => {
+  plusSlides(-1);
 });
