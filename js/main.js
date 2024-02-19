@@ -107,3 +107,24 @@ next.addEventListener("click", () => {
 prev.addEventListener("click", () => {
   plusSlides(-1);
 });
+
+// timer
+
+let deadline = "2025-01-01";
+function getDataRemaind(deadline) {
+  let time = Date.parse(deadline) - Date.parse(new Date());
+
+  let days = Math.floor(time / (1000 * 60 * 60 * 24));
+  let housr = Math.floor((time / (1000 * 60 * 60)) % 24);
+  let minute = Math.floor((time / (1000 * 60)) % 60);
+  let second = Math.floor((time / 1000) % 60);
+
+  return {
+    total: time,
+    days,
+    housr,
+    minute,
+    second,
+  };
+}
+console.log(getDataRemaind(deadline));
