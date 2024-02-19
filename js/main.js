@@ -110,7 +110,7 @@ prev.addEventListener("click", () => {
 
 // timer
 
-let deadline = "2025-01-01";
+let deadline = "2024-02-20";
 function getDataRemaind(deadline) {
   let time = Date.parse(deadline) - Date.parse(new Date());
 
@@ -127,4 +127,29 @@ function getDataRemaind(deadline) {
     second,
   };
 }
-console.log(getDataRemaind(deadline));
+// console.log(getDataRemaind(deadline));
+
+function setClock(selector, endTime) {
+  const timer = document.querySelector(selector);
+  const days = timer.querySelector("#days");
+  const hours = timer.querySelector("#hours");
+  const minutes = timer.querySelector("#minutes");
+  const seconds = timer.querySelector("#seconds");
+  let interval = setInterval(updateClock, 1000);
+
+  updateClock();
+
+  function updateClock() {
+    let time = getDataRemaind(deadline);
+
+    days.innerHTML = time.days;
+    hours.innerHTML = time.housr;
+    minutes.innerHTML = time.minute;
+    seconds.innerHTML = time.second;
+
+    if (time.total <= 0) {
+      clearInterval(interval);
+    }
+  }
+}
+setClock(".timer", deadline);
